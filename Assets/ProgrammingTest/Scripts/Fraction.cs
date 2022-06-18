@@ -9,6 +9,12 @@ public struct Fraction
         denominator = d;
     }
 
+    public void Set(int n, int d)
+    {
+        numerator = n;
+        denominator = d;
+    }
+
     public int Numerator
     {
         get
