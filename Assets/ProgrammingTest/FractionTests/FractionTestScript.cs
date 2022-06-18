@@ -28,14 +28,32 @@ public class FractionTestScript
         CheckReference();
 
         //      5/10    +   1/20    =   11/20
-        f1.Set(5, 10);
-        f2.Set(1, 20);
+        f1.Set(0, 5, 10);
+        f2.Set(0, 1, 20);
         f3 = calculation.Addition(f1, f2);
 
         Assert.AreEqual(11, f3.Numerator);
         Assert.AreEqual(20, f3.Denominator);
-    }    
-    
+    }
+
+    /// <summary>
+    /// Test the accuracy of a single addition
+    /// </summary>
+    [Test]
+    public void SingleAdditionMixedFractionTest()
+    {
+        CheckReference();
+
+        //      5/10    +   1/20    =   11/20
+        f1.Set(1, 14, 15);
+        f2.Set(3, 15, 20);
+        f3 = calculation.Addition(f1, f2);
+
+        Assert.AreEqual(5, f3.Whole);
+        Assert.AreEqual(41, f3.Numerator);
+        Assert.AreEqual(60, f3.Denominator);
+    }
+
     /// <summary>
     /// Test the accurary of a single subtraction
     /// </summary>
@@ -44,8 +62,8 @@ public class FractionTestScript
     {
         CheckReference();
 
-        f1.Set(5, 10);
-        f2.Set(25, 78);
+        f1.Set(0, 5, 10);
+        f2.Set(0, 25, 78);
         f3 = calculation.Subtraction(f1, f2);
 
         Assert.AreEqual(7, f3.Numerator);
@@ -60,8 +78,8 @@ public class FractionTestScript
     {
         CheckReference();
 
-        f1.Set(12, 16);
-        f2.Set(14, 27);
+        f1.Set(0, 12, 16);
+        f2.Set(0, 14, 27);
         f3 = calculation.Multiplication(f1, f2);
 
         Assert.AreEqual(7, f3.Numerator);
@@ -76,8 +94,8 @@ public class FractionTestScript
     {
         CheckReference();
 
-        f1.Set(14, 53);
-        f2.Set(37, 75);
+        f1.Set(0, 14, 53);
+        f2.Set(0, 37, 75);
         f3 = calculation.Divide(f1, f2);
 
         Assert.AreEqual(1050, f3.Numerator);

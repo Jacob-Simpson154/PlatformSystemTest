@@ -1,18 +1,34 @@
 public struct Fraction
 {
+    private int whole;
     private int numerator;
     private int denominator;
 
-    public Fraction(int n, int d)
+    public Fraction(int w, int n, int d)
     {
+        whole = w;
         numerator = n;
         denominator = d;
     }
 
-    public void Set(int n, int d)
+    public void Set(int w, int n, int d)
     {
+        whole = w;
         numerator = n;
         denominator = d;
+    }
+
+    public int Whole
+    {
+        get
+        {
+            return whole;
+        }
+
+        set
+        {
+            whole = value;
+        }
     }
 
     public int Numerator

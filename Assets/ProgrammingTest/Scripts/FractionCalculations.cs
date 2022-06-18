@@ -5,7 +5,10 @@ public class FractionCalculations
     /// </summary>
     public Fraction Addition(Fraction l, Fraction r)
     {
-        Fraction result = new Fraction(((l.Numerator * r.Denominator) + (r.Numerator * l.Denominator)), (l.Denominator * r.Denominator));
+        if (l.Whole > 0) ConvertFromWhole(ref l);
+        if (r.Whole > 0) ConvertFromWhole(ref r);
+
+        Fraction result = new Fraction(0, ((l.Numerator * r.Denominator) + (r.Numerator * l.Denominator)), (l.Denominator * r.Denominator));
         return ReduceToLowestTerms(result);
     }
 
@@ -14,7 +17,10 @@ public class FractionCalculations
     /// </summary>
     public Fraction Subtraction(Fraction l, Fraction r)
     {
-        Fraction result = new Fraction(((l.Numerator * r.Denominator) - (r.Numerator * l.Denominator)), (l.Denominator * r.Denominator));
+        if (l.Whole > 0) ConvertFromWhole(ref l);
+        if (r.Whole > 0) ConvertFromWhole(ref r);
+
+        Fraction result = new Fraction(0, ((l.Numerator * r.Denominator) - (r.Numerator * l.Denominator)), (l.Denominator * r.Denominator));
         return ReduceToLowestTerms(result);
     }
 
@@ -23,7 +29,10 @@ public class FractionCalculations
     /// </summary>
     public Fraction Multiplication(Fraction l, Fraction r)
     {
-        Fraction result = new Fraction((l.Numerator * r.Numerator), (l.Denominator * r.Denominator));
+        if (l.Whole > 0) ConvertFromWhole(ref l);
+        if (r.Whole > 0) ConvertFromWhole(ref r);
+
+        Fraction result = new Fraction(0, (l.Numerator * r.Numerator), (l.Denominator * r.Denominator));
         return ReduceToLowestTerms(result);
     }
 
@@ -32,6 +41,9 @@ public class FractionCalculations
     /// </summary>
     public Fraction Divide(Fraction l, Fraction r)
     {
+        if (l.Whole > 0) ConvertFromWhole(ref l);
+        if (r.Whole > 0) ConvertFromWhole(ref r);
+
         int temp = r.Numerator;
         r.Numerator = r.Denominator;
         r.Denominator = temp;
@@ -57,6 +69,19 @@ public class FractionCalculations
         int greatestCommon = GreatestCommonDivisor(input.Numerator, input.Denominator);
         input.Numerator = input.Numerator / greatestCommon;
         input.Denominator = input.Denominator / greatestCommon;
+        if (input.Numerator > input.Denominator) ConvertToWhole(ref input);
         return input;
+    }
+
+    void ConvertFromWhole(ref Fraction input)
+    {
+        input.Numerator = input.Numerator + (input.Whole * input.Denominator);
+        input.Whole = 0;
+    }
+
+    public void ConvertToWhole(ref Fraction input)
+    {
+        input.Whole = input.Numerator / input.Denominator;
+        input.Numerator = input.Numerator%input.Denominator;
     }
 }
