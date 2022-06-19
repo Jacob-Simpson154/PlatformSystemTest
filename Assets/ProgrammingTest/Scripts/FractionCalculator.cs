@@ -25,7 +25,7 @@ public class FractionCalculator : MonoBehaviour
 
     void Awake()
     {
-        //Check all UI references are not null
+        //Check all UI references are not null before anything else
         try
         {
             if (leftWholeInputField == null || leftNumeratorInputField == null 
@@ -40,16 +40,9 @@ public class FractionCalculator : MonoBehaviour
         {
             throw;
         }
-}
 
-    /// <summary>
-    /// Checks if an istance of calculations exists.
-    /// Creates one if none exist.
-    /// </summary>
-    void CheckReference()
-    {
-        if(calculations==null)
-            calculations = new FractionCalculations();
+        //Create an instance of calculations
+        calculations = new FractionCalculations();
     }
 
     /// <summary>
@@ -57,9 +50,6 @@ public class FractionCalculator : MonoBehaviour
     /// </summary>
     public void CalculateFraction()
     {
-        //Always check calculation exist
-        CheckReference();
-
         //Check if all input fields have a value
         if (leftNumeratorInputField.text == "" || leftDenominatorInputField.text == "" || rightNumeratorInputField.text == "" || rightDenominatorInputField.text == "")
         {
@@ -80,10 +70,21 @@ public class FractionCalculator : MonoBehaviour
 
         leftWhole = 0;
         rightWhole = 0;
+
         //Seperate conditional statements for whole numbers as they are optional
-        if(leftWholeInputField.text != "" || rightWholeInputField.text != "")
+        if(leftWholeInputField.text != "")
         {
-            if(!int.TryParse(leftWholeInputField.text, out leftWhole) || !int.TryParse(rightWholeInputField.text, out rightWhole))
+            if(!int.TryParse(leftWholeInputField.text, out leftWhole))
+            {
+                resultText.text = "Cannot convert string input into integer";
+                Debug.LogWarning("Cannot convert string input into integer");
+                return;
+            }
+        }
+
+        if (rightWholeInputField.text != "")
+        {
+            if(!int.TryParse(rightWholeInputField.text, out rightWhole))
             {
                 resultText.text = "Cannot convert string input into integer";
                 Debug.LogWarning("Cannot convert string input into integer");
@@ -108,17 +109,43 @@ public class FractionCalculator : MonoBehaviour
         {
             switch (operationSelectionDropdown.value)
             {
-                case 0: result = calculations.Addition(left, right); break;
-                case 1: result = calculations.Subtraction(left, right); break;
-                case 2: result = calculations.Multiplication(left, right); break;
-                case 3: result = calculations.Divide(left, right); break;
+                case 0: calculations.Addition(left, right, ref result); break;
+                case 1: calculations.Subtraction(left, right, ref result); break;
+                case 2: calculations.Multiplication(left, right, ref result); break;
+                case 3: calculations.Divide(left, right, ref result); break;
             }
 
-            string message = "";
+
+            //The following code informs user on their input type
+            string message = "Left Fraction is a ";
+
+            if (leftNum < leftDen && leftWhole == 0)
+                message += "Proper";
+            else if (leftNum > leftDen && leftWhole == 0)
+                message += "Improper";
+            else if (leftWhole > 0)
+                message += "Mixed";
+
+            message += " fraction.\t Right Fraction is a ";
+
+            if (rightNum < rightDen && rightWhole == 0)
+                message += "Proper";
+            else if (rightNum > rightDen && rightWhole == 0)
+                message += "Improper";
+            else if (rightWhole > 0)
+                message += "Mixed";
+
+            message += " fraction.\nThe resulting fraction is: ";
+
+            //The following code outputs the fraction
+
             if (result.Whole > 0)
                 message += result.Whole + " ";
-            message += result.Numerator + " / " + result.Denominator;
+            if(result.Numerator!=0)
+                message += result.Numerator + " / " + result.Denominator;
             resultText.text = message;
+
+
         }
         //If there is a problem catch it
         catch (System.Exception)
