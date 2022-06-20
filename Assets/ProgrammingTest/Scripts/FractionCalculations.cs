@@ -53,7 +53,9 @@ public class FractionCalculations
 
 
     /// <summary>
-    /// Recursive function to find the greatest common divisor
+    /// Recursive function to find the greatest common divisor.
+    /// Time Complexity Best case O(1) - only if d is divisble by n it can be over with one recursive call.
+    /// Time Complexity Worst case O(log n) - when the values become a fibonachi sequence.
     /// </summary>
     int GreatestCommonDivisor(int n, int d)
     {
