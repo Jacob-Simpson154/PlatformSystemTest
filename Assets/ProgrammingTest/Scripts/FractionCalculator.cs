@@ -50,6 +50,7 @@ public class FractionCalculator : MonoBehaviour
     /// </summary>
     public void CalculateFraction()
     {
+        /////////////////////////////////////////////////////The following portion of code is to retrieve the value from UI//////////////////////////////////////////////////////////////
         //Check if all input fields have a value
         if (leftNumeratorInputField.text == "" || leftDenominatorInputField.text == "" || rightNumeratorInputField.text == "" || rightDenominatorInputField.text == "")
         {
@@ -68,6 +69,7 @@ public class FractionCalculator : MonoBehaviour
             return;
         }
 
+        //Reset whole values to zero
         leftWhole = 0;
         rightWhole = 0;
 
@@ -80,6 +82,13 @@ public class FractionCalculator : MonoBehaviour
                 Debug.LogWarning("Cannot convert string input into integer");
                 return;
             }
+
+            if(leftWhole < 0)
+            {
+                resultText.text = "This calculator does not support Mixed Fractions with whole numbers less than zero";
+                Debug.LogWarning("This calculator does not support Mixed Fractions with whole numbers less than zero");
+                return;
+            }
         }
 
         if (rightWholeInputField.text != "")
@@ -90,16 +99,41 @@ public class FractionCalculator : MonoBehaviour
                 Debug.LogWarning("Cannot convert string input into integer");
                 return;
             }
+
+            if (rightWhole < 0)
+            {
+                resultText.text = "This calculator does not support Mixed Fractions with whole numbers less than zero";
+                Debug.LogWarning("This calculator does not support Mixed Fractions with whole numbers less than zero");
+                return;
+            }
         }
 
+
+        ///////////////////////////////////////////The following portion of code is to check the configuration of values//////////////////////////////////////////////////////////////////
         //Fractions cannot have denominators of zero
-        if(leftDen == 0 && rightDen == 0)
+        if (leftDen == 0 && rightDen == 0)
         {
             resultText.text = "Fractions cannot have denominators of zero";
             Debug.LogWarning("Fractions cannot have denominators of zero");
             return;
         }
 
+        //Cannot have negative numerator/denominator with mixed fractions
+        if(leftWhole != 0 && (leftNum < 0 || leftDen < 0))
+        {
+            resultText.text = "Mixed Fractions cannot have negative numerators or denominators";
+            Debug.LogWarning("Mixed Fractions cannot have negative numerators or denominators");
+            return;
+        }
+
+        if (rightWhole != 0 && (rightNum < 0 || rightDen < 0))
+        {
+            resultText.text = "Mixed Fractions cannot have negative numerators or denominators";
+            Debug.LogWarning("Mixed Fractions cannot have negative numerators or denominators");
+            return;
+        }
+
+        ///////////////////////////////////////////////The following portion of code performs the fraction calculation/////////////////////////////////////////////////////////////////////
         //Set the Fractions to the inputed values
         left.Set(leftWhole, leftNum, leftDen);
         right.Set(rightWhole, rightNum, rightDen);
@@ -139,7 +173,7 @@ public class FractionCalculator : MonoBehaviour
 
             //The following code outputs the fraction
 
-            if (result.Whole > 0)
+            if (result.Whole != 0)
                 message += result.Whole + " ";
             if(result.Numerator!=0)
                 message += result.Numerator + " / " + result.Denominator;
